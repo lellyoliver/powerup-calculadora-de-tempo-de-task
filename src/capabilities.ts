@@ -12,12 +12,13 @@ function assetUrl(path: string): string {
 }
 
 function iconUrl(): string {
-  // PNG 24x24 — SVG costuma renderizar como quadrado cinza no card-back-section
-  return assetUrl('static/icon.png');
+  // Docs Trello: ícone do card-back-section DEVE ser cinza.
+  // Ícone colorido é rejeitado e aparece só como "bolinha" cinza.
+  return assetUrl('static/icon-gray.png');
 }
 
 function sectionUrl(t: TrelloPowerUpIFrame): string {
-  return t.signUrl(assetUrl('card-back-section.html'));
+  return t.signUrl(assetUrl('card-back-section.html'), { v: '9' });
 }
 
 async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> {
@@ -40,7 +41,7 @@ window.TrelloPowerUp.initialize({
     content: {
       type: 'iframe',
       url: sectionUrl(t),
-      height: 220,
+      height: 200,
     },
   }),
 
