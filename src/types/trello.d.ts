@@ -1,7 +1,7 @@
 export interface CardTimeData {
   dataInicial?: string;
   dataFinal?: string;
-  /** ISO date (YYYY-MM-DD) da conclusão real detectada no Trello */
+  /** YYYY-MM-DD — data de entrega/conclusão real do Trello (dueComplete / lista Done) */
   dataConclusao?: string;
 }
 
@@ -55,6 +55,14 @@ export interface TrelloAction {
   data: {
     listAfter?: { id: string; name: string };
     listBefore?: { id: string; name: string };
+    card?: {
+      due?: string | null;
+      dueComplete?: boolean;
+    };
+    old?: {
+      due?: string | null;
+      dueComplete?: boolean;
+    };
   };
 }
 
@@ -75,6 +83,11 @@ export interface TrelloPowerUpIFrame {
     scope: 'card' | 'board' | 'member' | 'organization',
     visibility: 'shared' | 'private',
     data: Record<string, unknown>,
+  ): Promise<void>;
+  remove(
+    scope: 'card' | 'board' | 'member' | 'organization',
+    visibility: 'shared' | 'private',
+    key?: string,
   ): Promise<void>;
   card(fields: string | string[]): Promise<Partial<TrelloCard>>;
   list(fields: string | string[]): Promise<Partial<TrelloList>>;
