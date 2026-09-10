@@ -5,8 +5,15 @@ import { resolve } from 'node:path';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  // Em GitHub Pages o site fica em /<repo>/ — local continua em /
+  const base =
+    env.VITE_BASE_PATH ||
+    (process.env.GITHUB_PAGES === 'true'
+      ? '/powerup-calculadora-de-tempo-de-task/'
+      : '/');
 
   return {
+    base,
     plugins: [vue(), basicSsl()],
     resolve: {
       alias: {
