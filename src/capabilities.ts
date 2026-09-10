@@ -2,23 +2,16 @@ import { calculateTaskTime } from '@/composables/useTaskTimeCalc';
 import { loadCardMetrics } from '@/api/trello';
 import type { TrelloBadge, TrelloPowerUpIFrame } from '@/types/trello';
 
-/** URL absoluta no GitHub Pages (/repo/...), sem depender da barra final do connector. */
-function assetUrl(path: string): string {
-  const base = import.meta.env.BASE_URL.endsWith('/')
-    ? import.meta.env.BASE_URL
-    : `${import.meta.env.BASE_URL}/`;
-  const normalized = path.replace(/^\//, '');
-  return new URL(`${base}${normalized}`, window.location.origin).href;
-}
-
-function iconUrl(): string {
-  // Docs Trello: ícone do card-back-section DEVE ser cinza.
-  // Ícone colorido é rejeitado e aparece só como "bolinha" cinza.
-  return assetUrl('static/icon-gray.png');
-}
+/** URL absoluta fixa — evita base path / cache quebrando o ícone no Trello */
+const ICON_GRAY =
+  'https://lellyoliver.github.io/powerup-calculadora-de-tempo-de-task/static/icon-gray.svg';
 
 function sectionUrl(t: TrelloPowerUpIFrame): string {
-  return t.signUrl(assetUrl('card-back-section.html'), { v: '9' });
+  const url = new URL(
+    'https://lellyoliver.github.io/powerup-calculadora-de-tempo-de-task/card-back-section.html',
+  );
+  url.searchParams.set('v', '11');
+  return t.signUrl(url.href);
 }
 
 async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> {
@@ -37,7 +30,7 @@ async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> 
 window.TrelloPowerUp.initialize({
   'card-back-section': (t) => ({
     title: 'Tempo da task',
-    icon: iconUrl(),
+    icon: ICON_GRAY,
     content: {
       type: 'iframe',
       url: sectionUrl(t),
