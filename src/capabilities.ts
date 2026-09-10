@@ -12,12 +12,12 @@ function assetUrl(path: string): string {
 }
 
 function iconUrl(): string {
-  // Ícone transparente: evita o quadrado/botão com hover no header do Trello
-  return assetUrl('static/icon-empty.png');
+  // Obrigatório cinza no card-back-section — colorido/transparente quebra o hover
+  return assetUrl('static/icon-gray.png');
 }
 
 function sectionUrl(t: TrelloPowerUpIFrame): string {
-  return t.signUrl(assetUrl('card-back-section.html'));
+  return t.signUrl(assetUrl('card-back-section.html'), { v: '7' });
 }
 
 async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> {
@@ -35,13 +35,14 @@ async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> 
 
 window.TrelloPowerUp.initialize({
   'card-back-section': (t) => ({
-    // Título real fica no iframe — header do Trello sem botão/hover estranho
-    title: ' ',
+    // Título vazio no header do Trello evita o "botão" cinza no hover sobre o texto.
+    // O título visível fica dentro do iframe.
+    title: '\u200B',
     icon: iconUrl(),
     content: {
       type: 'iframe',
       url: sectionUrl(t),
-      height: 240,
+      height: 250,
     },
   }),
 

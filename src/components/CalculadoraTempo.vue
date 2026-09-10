@@ -94,5 +94,7 @@ watch(
   font-weight: 600;
   line-height: 1.25;
   color: #c7d1db;
+  pointer-events: none;
+  user-select: none;
 }
 </style>
