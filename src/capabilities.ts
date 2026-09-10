@@ -31,21 +31,16 @@ async function buildDetailBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]>
 
   const r = calculateTaskTime(data);
   return [
-    { title: 'Tempo de task', text: `${r.tempoTask} dias`, color: 'blue', refresh: 60 },
-    {
-      title: 'Dias até finalizar',
-      text: `${r.diasAteFinalizar} dias`,
-      color: 'yellow',
-      refresh: 60,
-    },
-    { title: 'Atrasos', text: `${r.atrasos} dias`, color: 'red', refresh: 60 },
-    { title: 'Total de dias', text: `${r.totalDias} dias`, color: 'green', refresh: 60 },
+    { title: 'Tempo', text: String(r.tempoTask), color: 'blue', refresh: 60 },
+    { title: 'Restante', text: String(r.diasAteFinalizar), color: 'yellow', refresh: 60 },
+    { title: 'Atraso', text: String(r.atrasos), color: 'red', refresh: 60 },
+    { title: 'Total', text: String(r.totalDias), color: 'green', refresh: 60 },
   ];
 }
 
 window.TrelloPowerUp.initialize({
   'card-back-section': (t) => ({
-    title: 'Calculadora de tempo de task',
+    title: 'Tempo da task',
     icon: iconUrl(),
     content: {
       type: 'iframe',

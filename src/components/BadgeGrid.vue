@@ -6,10 +6,10 @@ defineProps<{
 }>();
 
 const badges = [
-  { key: 'tempoTask' as const, label: 'Tempo de task', tone: 'blue' },
-  { key: 'diasAteFinalizar' as const, label: 'Dias até finalizar', tone: 'yellow' },
-  { key: 'atrasos' as const, label: 'Atrasos (dias)', tone: 'red' },
-  { key: 'totalDias' as const, label: 'Total de dias', tone: 'green' },
+  { key: 'tempoTask' as const, label: 'Tempo', tone: 'blue' },
+  { key: 'diasAteFinalizar' as const, label: 'Restante', tone: 'yellow' },
+  { key: 'atrasos' as const, label: 'Atraso', tone: 'red' },
+  { key: 'totalDias' as const, label: 'Total', tone: 'green' },
 ];
 </script>
 
@@ -28,7 +28,7 @@ const badges = [
 .badge-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: 6px;
 }
 
 .metric {
