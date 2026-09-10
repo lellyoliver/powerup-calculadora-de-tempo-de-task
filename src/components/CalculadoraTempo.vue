@@ -63,7 +63,6 @@ watch(
 
 <template>
   <section class="calculadora">
-    <h2 class="calculadora__title">Tempo da task</h2>
     <DateRangeFields
       :data-inicial="data.dataInicial ?? ''"
       :data-final="data.dataFinal ?? ''"
@@ -85,16 +84,6 @@ watch(
     Arial,
     sans-serif;
   color: #c7d1db;
-  padding: 0 2px 8px;
-}
-
-.calculadora__title {
-  margin: 0 0 12px;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.25;
-  color: #c7d1db;
-  pointer-events: none;
-  user-select: none;
+  padding: 4px 2px 8px;
 }
 </style>

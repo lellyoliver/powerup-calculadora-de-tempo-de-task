@@ -12,12 +12,12 @@ function assetUrl(path: string): string {
 }
 
 function iconUrl(): string {
-  // Obrigatório cinza no card-back-section — colorido/transparente quebra o hover
-  return assetUrl('static/icon-gray.png');
+  // PNG 24x24 — SVG costuma renderizar como quadrado cinza no card-back-section
+  return assetUrl('static/icon.png');
 }
 
 function sectionUrl(t: TrelloPowerUpIFrame): string {
-  return t.signUrl(assetUrl('card-back-section.html'), { v: '7' });
+  return t.signUrl(assetUrl('card-back-section.html'));
 }
 
 async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> {
@@ -35,14 +35,12 @@ async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> 
 
 window.TrelloPowerUp.initialize({
   'card-back-section': (t) => ({
-    // Título vazio no header do Trello evita o "botão" cinza no hover sobre o texto.
-    // O título visível fica dentro do iframe.
-    title: '\u200B',
+    title: 'Tempo da task',
     icon: iconUrl(),
     content: {
       type: 'iframe',
       url: sectionUrl(t),
-      height: 250,
+      height: 220,
     },
   }),
 
