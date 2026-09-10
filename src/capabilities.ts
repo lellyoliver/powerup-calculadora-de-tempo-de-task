@@ -11,20 +11,6 @@ function sectionUrl(t: TrelloPowerUpIFrame): string {
   return t.signUrl(base);
 }
 
-async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> {
-  const data = await loadCardMetrics(t);
-  if (!data.dataInicial || !data.dataFinal) return [];
-
-  const r = calculateTaskTime(data);
-  const icon = iconUrl();
-  return [
-    { text: String(r.tempoTask), color: 'blue', icon, refresh: 60 },
-    { text: String(r.diasAteFinalizar), color: 'yellow', icon, refresh: 60 },
-    { text: String(r.atrasos), color: 'red', icon, refresh: 60 },
-    { text: String(r.totalDias), color: 'green', icon, refresh: 60 },
-  ];
-}
-
 async function buildDetailBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> {
   const data = await loadCardMetrics(t);
   if (!data.dataInicial || !data.dataFinal) return [];
@@ -53,8 +39,6 @@ window.TrelloPowerUp.initialize({
       height: 220,
     },
   }),
-
-  'card-badges': (t) => buildFrontBadges(t),
 
   'card-detail-badges': (t) => buildDetailBadges(t),
 });
