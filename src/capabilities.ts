@@ -12,8 +12,8 @@ function assetUrl(path: string): string {
 }
 
 function iconUrl(): string {
-  // PNG 24x24 — SVG costuma renderizar como quadrado cinza no card-back-section
-  return assetUrl('static/icon.png');
+  // Ícone transparente: evita o quadrado/botão com hover no header do Trello
+  return assetUrl('static/icon-empty.png');
 }
 
 function sectionUrl(t: TrelloPowerUpIFrame): string {
@@ -35,12 +35,13 @@ async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> 
 
 window.TrelloPowerUp.initialize({
   'card-back-section': (t) => ({
-    title: 'Tempo da task',
+    // Título real fica no iframe — header do Trello sem botão/hover estranho
+    title: ' ',
     icon: iconUrl(),
     content: {
       type: 'iframe',
       url: sectionUrl(t),
-      height: 220,
+      height: 240,
     },
   }),
 
