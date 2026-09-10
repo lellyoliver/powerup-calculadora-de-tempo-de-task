@@ -2,13 +2,21 @@ import { calculateTaskTime } from '@/composables/useTaskTimeCalc';
 import { loadCardMetrics } from '@/api/trello';
 import type { TrelloBadge, TrelloPowerUpIFrame } from '@/types/trello';
 
+/** URL absoluta no GitHub Pages (/repo/...), sem depender da barra final do connector. */
+function assetUrl(path: string): string {
+  const base = import.meta.env.BASE_URL.endsWith('/')
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
+  const normalized = path.replace(/^\//, '');
+  return new URL(`${base}${normalized}`, window.location.origin).href;
+}
+
 function iconUrl(): string {
-  return new URL('./static/icon.svg', window.location.href).href;
+  return assetUrl('static/icon.svg');
 }
 
 function sectionUrl(t: TrelloPowerUpIFrame): string {
-  const base = new URL('./card-back-section.html', window.location.href).href;
-  return t.signUrl(base);
+  return t.signUrl(assetUrl('card-back-section.html'));
 }
 
 async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> {
