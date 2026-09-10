@@ -12,7 +12,8 @@ function assetUrl(path: string): string {
 }
 
 function iconUrl(): string {
-  return assetUrl('static/icon.svg');
+  // PNG 24x24 — SVG costuma renderizar como quadrado cinza no card-back-section
+  return assetUrl('static/icon.png');
 }
 
 function sectionUrl(t: TrelloPowerUpIFrame): string {
@@ -24,25 +25,11 @@ async function buildFrontBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> 
   if (!data.dataInicial || !data.dataFinal) return [];
 
   const r = calculateTaskTime(data);
-  // Só o número — sem ícone
   return [
     { text: String(r.tempoTask), color: 'blue', refresh: 60 },
     { text: String(r.diasAteFinalizar), color: 'yellow', refresh: 60 },
     { text: String(r.atrasos), color: 'red', refresh: 60 },
     { text: String(r.totalDias), color: 'green', refresh: 60 },
-  ];
-}
-
-async function buildDetailBadges(t: TrelloPowerUpIFrame): Promise<TrelloBadge[]> {
-  const data = await loadCardMetrics(t);
-  if (!data.dataInicial || !data.dataFinal) return [];
-
-  const r = calculateTaskTime(data);
-  return [
-    { title: 'Tempo', text: String(r.tempoTask), color: 'blue', refresh: 60 },
-    { title: 'Restante', text: String(r.diasAteFinalizar), color: 'yellow', refresh: 60 },
-    { title: 'Atraso', text: String(r.atrasos), color: 'red', refresh: 60 },
-    { title: 'Total', text: String(r.totalDias), color: 'green', refresh: 60 },
   ];
 }
 
@@ -58,6 +45,4 @@ window.TrelloPowerUp.initialize({
   }),
 
   'card-badges': (t) => buildFrontBadges(t),
-
-  'card-detail-badges': (t) => buildDetailBadges(t),
 });
