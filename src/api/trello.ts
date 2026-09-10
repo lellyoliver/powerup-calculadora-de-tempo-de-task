@@ -59,7 +59,12 @@ export async function resolveCompletionDate(
       conclusao = await fetchDueCompleteDate(t, card.id);
     }
 
-    // Campo "Data de entrega" do card (due)
+    // Concluiu hoje / agora — usa a data atual (não a due antiga)
+    if (!conclusao && completedByDue) {
+      conclusao = todayYmd();
+    }
+
+    // Campo "Data de entrega" do card (due) como último recurso
     if (!conclusao && completedByDue && card.due) {
       const dueYmd = card.due.slice(0, 10);
       if (isValidYmd(dueYmd)) conclusao = dueYmd;

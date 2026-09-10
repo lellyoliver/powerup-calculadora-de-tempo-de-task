@@ -5,14 +5,13 @@ import { diffDays, isValidYmd, todayYmd } from '@/utils/dates';
 /**
  * Calcula os 4 indicadores da Calculadora de Tempo de Task.
  *
- * `dataConclusao` = data de entrega real do Trello (due marcado como completo
- * ou entrada na lista Concluído/Done). Quando existe, a task está concluída
- * (`isCompleted`) e essa data entra no cálculo do Total de dias.
+ * `dataConclusao` = data de entrega real do Trello (due completo / lista Done).
+ * Referência do atraso: data de entrega se concluído; senão, hoje.
  *
  * 1. Tempo de task      = Data Final − Data Inicial
  * 2. Dias até finalizar = max(0, Data Final − hoje); 0 se concluído
- * 3. Atrasos            = se hoje > Data Final e NÃO concluído → hoje − Data Final; senão 0
- * 4. Total de dias      = Tempo de task + (dataConclusao − Data Final) se entrega > Data Final
+ * 3. Atrasos            = dias além da Data Final (0 se ainda no prazo)
+ * 4. Total de dias      = Tempo de task + Atrasos  (ex.: 23 + 8 = 31)
  */
 export function calculateTaskTime(
   data: Pick<CardTimeData, 'dataInicial' | 'dataFinal' | 'dataConclusao'>,
@@ -30,9 +29,11 @@ export function calculateTaskTime(
   }
 
   const today = todayYmd(now);
-  // Data de entrega do Trello (quando a task foi realmente concluída)
   const dataEntrega = isValidYmd(data.dataConclusao) ? data.dataConclusao : undefined;
   const isCompleted = Boolean(dataEntrega);
+
+  // Dia de referência: entrega no Trello, ou hoje se ainda aberta
+  const referenceDay = dataEntrega ?? today;
 
   const tempoTask = Math.max(0, diffDays(data.dataInicial, data.dataFinal));
 
@@ -40,16 +41,10 @@ export function calculateTaskTime(
     ? 0
     : Math.max(0, diffDays(today, data.dataFinal));
 
-  const atrasos =
-    !isCompleted && diffDays(data.dataFinal, today) > 0
-      ? diffDays(data.dataFinal, today)
-      : 0;
+  const atrasos = Math.max(0, diffDays(data.dataFinal, referenceDay));
 
-  let totalDias = tempoTask;
-  if (isCompleted && dataEntrega && diffDays(data.dataFinal, dataEntrega) > 0) {
-    // Entrega (Trello) depois da Data Final → soma os dias excedentes
-    totalDias = tempoTask + diffDays(data.dataFinal, dataEntrega);
-  }
+  // Total = tempo planejado + atraso (ex.: 23 + 8 = 31)
+  const totalDias = tempoTask + atrasos;
 
   return { tempoTask, diasAteFinalizar, atrasos, totalDias };
 }
